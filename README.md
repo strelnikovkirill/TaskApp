@@ -2,7 +2,7 @@
 
 # Application description
 
-TODO: fill 
+App can be used for simple task viewer/editor. Multiple users, shared list of tasks and personal user tasks. Creation, editing, deleting and simple viewing supported. 
 
 ## Running 
 
