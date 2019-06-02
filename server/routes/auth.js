@@ -2,19 +2,27 @@ const express = require('express');
 const authRoutes = express.Router();
 const sha256 = require('../utils/hash');
 let Person = require('../models/person');
-
+const salts = require('../utils/salt_c');
 
 authRoutes.route('/').post(function (req, res) {
-  Person.findOne({login: req.login}, function (err, person) {
+  Person.findOne({login: req.body.login}, function (err, person) {
     if (person) {
-      if (!person.token) {
-        person.token = sha256(req.login, "s0me@ver4#!#secure=+=sa1t");
-        // Person.save(person);
+      if (sha256(req.body.password, salts.password) === person.password) {
+        if (!person.token) {
+          person.token = sha256(req.login, salts.token);
+          person.save();
+        }
+        res.status(200).json({
+          'success': true,
+          'token': person.token,
+          'login': person.login
+        })
+      } else {
+        res.status(200).json({
+          'success': false,
+          'message': 'Password is incorrect'
+        })
       }
-      res.status(200).json({
-        'success': true,
-        'token': person.token
-      })
     } else {
       res.status(200).json({
         'success': false,
