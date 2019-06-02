@@ -8,15 +8,16 @@
     "react-scripts": "3.0.1",
     "axios": "^0.18.0",
     "bootstrap": "^4.3.1",
+    "react-bootstrap": "^1.0.0-beta.9",
     "mongoose": "^5.5.7",
     "nodemon": "^1.19.0",
     "react-router-dom": "^5.0.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "./node_modules/.bin/react-scripts start",
+    "build": "./node_modules/.bin/react-scripts build",
+    "test": "./node_modules/.bin/react-scripts test",
+    "eject": "./node_modules/.bin/react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"

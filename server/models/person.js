@@ -18,6 +18,9 @@ let Person = new Schema({
   password: {
     type: String,
     required: true
+  },
+  token: {
+    type: String
   }
 }, {
   collection: 'person'

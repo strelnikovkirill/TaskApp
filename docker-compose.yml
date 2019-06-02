@@ -1,0 +1,24 @@
+version: '3.5'
+services:
+  server:
+    container_name: tensor-demo-server
+    build:
+      dockerfile: Dockerfile.server
+      context: .
+    network_mode: host
+    depends_on:
+      - db
+  client:
+    container_name: tensor-demo-client
+    build:
+      dockerfile: Dockerfile.client
+      context: .
+    network_mode: host
+    depends_on:
+      - server
+  db:
+    container_name: tensor-demo-db
+    image: mongo:3.4.20-xenial
+    network_mode: host
+    
+

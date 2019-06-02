@@ -1,0 +1,4 @@
+FROM node:10.16.0-jessie
+ADD server /server/
+WORKDIR /server
+CMD npm i && ./node_modules/.bin/nodemon server

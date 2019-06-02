@@ -1,0 +1,4 @@
+FROM node:10.16.0-jessie
+ADD client /client/
+WORKDIR /client
+CMD npm i && npm start
