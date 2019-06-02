@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import Api from '../../API';
 
 class TableRow extends Component {
 
@@ -13,9 +13,7 @@ class TableRow extends Component {
   }
 
   delete() {
-    axios.get('http://localhost:4000/task/delete/' + this.props.obj._id)
-         .then(console.log('Deleted'))
-         .catch(err => console.log(err))
+    Api.task.delete(this.props.obj._id).then(res => {}).catch(err => console.log(err))
   }
 
   formatDate(date) {

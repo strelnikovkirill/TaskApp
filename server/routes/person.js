@@ -2,18 +2,24 @@ const express = require('express');
 const personRoutes = express.Router();
 const sha256 = require('../utils/hash');
 let Person = require('../models/person');
+const salts = require('../utils/salt_c');
 
 personRoutes.route('/add').post(function (req, res) {
   let reqPerson = new Person(req.body);
-  Person.findOne({login: req.login}, function (err, person) {
+  console.log(reqPerson)
+  Person.findOne({'login': reqPerson.login}, function (err, person) {
     if (person) {
-      console.log(person);
-      res.status(500).json({'success': false, 'message': 'A person with such login already exists'})
+      res.status(200).json({'success': false, 'message': 'A person with such login already exists'})
     } else {
-      reqPerson.token = sha256(req.login, "s0me@ver4#!#secure=+=sa1t");
+      reqPerson.password = sha256(reqPerson.password, salts.password)
+      reqPerson.token = sha256(reqPerson.login, salts.token);
       reqPerson.save()
         .then(person => {
-          res.status(200).json({'success': true, token: person.token});
+          res.status(200).json({
+            'success': true,
+            token: person.token,
+            login: person.login
+          });
         })
         .catch(err => {
           console.log(err);
@@ -25,6 +31,14 @@ personRoutes.route('/add').post(function (req, res) {
 
 personRoutes.route('/').get(function (req, res) {
   Person.find(function (err, person) {
+    if (err) console.log(err);
+    else res.json(person);
+  });
+});
+
+personRoutes.route('/:login').get(function (req, res) {
+  let login = req.params.login;
+  Person.findOne({'login': login}, function (err, person) {
     if (err) console.log(err);
     else res.json(person);
   });

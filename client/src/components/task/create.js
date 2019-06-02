@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import Api from '../../API';
 
 export default class Create extends Component {
 
@@ -63,16 +63,16 @@ export default class Create extends Component {
       description: this.state.description,
       date: this.state.date
     };
-    axios.post('http://localhost:4000/task/add', obj)
-         .then(res => console.log(res.data));
-    this.setState({
-      title: '',
-      description: '',
-      date: '',
-      errorTitle: '',
-      errorkDescription: '',
-      errorDate: ''
-    })
+    Api.task.create(obj).then(res => {
+      this.setState({
+        title: '',
+        description: '',
+        date: '',
+        errorTitle: '',
+        errorkDescription: '',
+        errorDate: ''
+      })
+    });
   }
 
   render() {
