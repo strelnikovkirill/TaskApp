@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
-import axios from 'axios';
 import './authpage.css';
+import Alert from "react-bootstrap/Alert";
+import Container from "react-bootstrap/Container";
+import Api from '../API';
+
 
 export default class AuthPage extends Component {
   constructor(props) {
@@ -14,7 +17,6 @@ export default class AuthPage extends Component {
       login: '',
       password: '',
       alertText: '',
-      signInDisabled: true,
       errorLogin: '',
       errorPassword: ''
     }
@@ -27,13 +29,11 @@ export default class AuthPage extends Component {
   }
 
   onChangeLogin(e) {
-    this.setState({login: e.target.value,});
-    this.setState({signInDisabled: !this.isFormValid()})
+    this.setState({login: e.target.value});
   }
 
   onChangePassword(e) {
     this.setState({password: e.target.value})
-    this.setState({signInDisabled: !this.isFormValid()})
   }
 
   isFormValid(e) {
@@ -42,8 +42,6 @@ export default class AuthPage extends Component {
     let isPasswordEmpty = this.state.password.length === 0;
     let isLoginEmpty = this.state.login.length === 0;
     let isPasswordShort = this.state.password.length < 8;
-
-    console.log(isPasswordEmpty, isLoginEmpty, isPasswordShort)
 
     if (isPasswordEmpty) {
       this.setState({
@@ -73,31 +71,33 @@ export default class AuthPage extends Component {
 
   onSubmit(e) {
     e.preventDefault();
+    if (!this.isFormValid()) {
+      return;
+    }
     const obj = {
       login: this.state.login,
       password: this.state.password
     }
-    axios.post('http://localhost:4000/auth/', obj)
-      .then(res => {
-        console.log(res);
-        if (res.data.success) {
-          localStorage.setItem('token', res.data.token);
-          window.location = '/';
-        } else {
-          //TODO: handle error
-          this.showAlert(res.data.message);
-        }
-      })
+    Api.auth.authorize(obj).then(res => {
+      if (res.success) {
+        localStorage.setItem('token', res.token);
+        localStorage.setItem('login', res.login);
+        window.location = '/list';
+      } else {
+        this.showAlert(res.message);
+      }
+    })
   }
 
   render() {
     return (
-      <div className="container">
-        <div className="alert alert-danger my-3" style={{display: this.state.alertText !== '' ? 'block' : 'none'}}
-             role="alert">
-          {this.state.alertText}
-        </div>
+      <Container>
         <div className="col-sm-11 col-md-9 col-lg-7 mx-auto">
+          <div className="p-2">
+            <Alert variant="danger" show={this.state.alertText !== ''}>
+              {this.state.alertText}
+            </Alert>
+          </div>
           <div className="card card-signin my-5">
             <div className="card-body">
               <h5 className="card-title text-center">Sign In</h5>
@@ -132,16 +132,16 @@ export default class AuthPage extends Component {
                     type="submit"
                     className="btn btn-primary"
                     value="Log In"
-                    disabled={this.state.signInDisabled}
                     onClick={this.onSubmit}
                   > Sign in
                   </button>
                 </div>
+                <a href="/sign_up">Not registered yet? Sign up</a>
               </form>
             </div>
           </div>
         </div>
-      </div>
+      </Container>
     )
   }
 }

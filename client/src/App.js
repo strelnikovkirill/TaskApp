@@ -7,11 +7,15 @@ import List from './components/task/list';
 import Register from './components/register';
 import AuthPage from './components/authpage';
 import Profile from './components/profile';
+import Navbar from "react-bootstrap/Navbar";
+import Nav from "react-bootstrap/Nav";
+import Container from "react-bootstrap/es/Container";
+import NavbarBrand from "react-bootstrap/NavbarBrand";
+import NavDropdown from "react-bootstrap/NavDropdown";
 
 class App extends Component {
   constructor(props) {
     super(props);
-
     this.logOut = this.logOut.bind(this);
   }
 
@@ -25,51 +29,41 @@ class App extends Component {
     if (token != null) {
       return (
         <Router>
-          <div className="container-fluid">
-            <nav className="navbar navbar-expand-sm navbar-dark bg-primary">
-              <Link to={'/'} className="navbar-brand">Task app</Link>
-              <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul className="navbar-nav mr-auto">
-                  <li className="nav-item">
-                    <Link to={'/list'} className="nav-link">My tasks</Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link to={'/create'} className="nav-link">Add task</Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link to={'/profile'} className="nav-link">Profile</Link>
-                  </li>
-                </ul>
-              <ul className="navbar-nav">
-                  <li className="nav-item">
-                    Logged in as {localStorage.getItem('login')}
-                  </li>
-                  <li className="nav-item">
-                    <button className="btn btn-outline-primary" onClick={this.logOut}>Log out</button>
-                  </li>
-                </ul>
-              </div>
-            </nav>
+          <Navbar bg="primary" expand="sm">
+            <NavbarBrand to={'/'}>Task app</NavbarBrand>
+            <Navbar.Collapse id="collapse">
+              <Nav className="mr-auto">
+                <Nav.Item><Link to={'/list'} className="nav-link">My tasks</Link></Nav.Item>
+                <Nav.Item><Link to={'/create'} className="nav-link">Add task</Link></Nav.Item>
+                <Nav.Item><Link to={'/profile'} className="nav-link">Profile</Link></Nav.Item>
+              </Nav>
+              <Nav>
+                <NavDropdown title={"Logged in as " + localStorage.getItem('login')} id="nav-dropdown">
+                  <NavDropdown.Item onClick={this.logOut}>Log out</NavDropdown.Item>
+                </NavDropdown>
+              </Nav>
+            </Navbar.Collapse>
             <br/>
-            <div className="container">
-              <Switch>
-                <Route exact path='/create' component={Create}/>
-                <Route path='/edit/:id' component={Edit}/>
-                <Route path='/list' component={List}/>
-                <Route path='/auth' component={Register}/>
-                <Route path='/profile' component={Profile}/>
-              </Switch>
-            </div>
-          </div>
+          </Navbar>
+          <Container className="p-3">
+            <Switch>
+              <Route default exact path='/create' component={Create}/>
+              <Route path='/edit/:id' component={Edit}/>
+              <Route path='/list' component={List}/>
+              <Route path='/profile' component={Profile}/>
+            </Switch>
+          </Container>
         </Router>
       );
     } else {
       //TODO: check token on backend
       return (
-        <div>
-          <AuthPage/>
-          <Register/>
-        </div>
+        <Router>
+          <Switch>
+            <Route exact path='/' component={AuthPage}/>
+            <Route exact path='/sign_up' component={Register}/>
+          </Switch>
+        </Router>
       )
     }
   }
