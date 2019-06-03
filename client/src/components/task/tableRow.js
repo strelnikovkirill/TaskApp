@@ -13,7 +13,9 @@ class TableRow extends Component {
   }
 
   delete() {
-    Api.task.delete(this.props.obj._id).then(res => {}).catch(err => console.log(err))
+    Api.task.delete(this.props.obj._id).then(res => {
+      this.props.action(this.props.obj._id)
+    }).catch(err => console.log(err))
   }
 
   formatDate(date) {
