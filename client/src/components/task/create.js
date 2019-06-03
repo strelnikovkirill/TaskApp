@@ -59,9 +59,12 @@ export default class Create extends Component {
     e.preventDefault();
     if (!this.isValidForm()) return;
     const obj = {
-      title: this.state.title,
-      description: this.state.description,
-      date: this.state.date
+      task: {
+        title: this.state.title,
+        description: this.state.description,
+        date: this.state.date
+      },
+      login: localStorage.getItem('login')
     };
     Api.task.create(obj).then(res => {
       this.setState({

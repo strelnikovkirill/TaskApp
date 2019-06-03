@@ -21,7 +21,8 @@ let Person = new Schema({
   },
   token: {
     type: String
-  }
+  },
+  tasks: [{type: Schema.Types.ObjectId, ref: 'Task'}]
 }, {
   collection: 'person'
 });

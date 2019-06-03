@@ -12,7 +12,8 @@ let Task = new Schema({
   date: {
     type: Date,
     required: true
-  }
+  },
+  person: {type: Schema.Types.ObjectId, ref: 'Person'}
 }, {
   collection: 'task'
 });
