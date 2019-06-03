@@ -7,6 +7,15 @@ export default class List extends Component {
   constructor(props) {
     super(props);
     this.state = {tasks: []};
+
+    this.childHandler = this.childHandler.bind(this);
+  }
+
+  childHandler(data) {
+    console.log(data);
+    this.setState({
+      tasks: this.state.tasks.filter(t => t._id !== data)
+    })
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -32,7 +41,7 @@ export default class List extends Component {
   }
 
   tabRow() {
-    return this.state.tasks.map((object, item) => <TableRow obj={object} key={item}/>);
+    return this.state.tasks.map((object, item) => <TableRow obj={object} key={item} action={this.childHandler}/>);
   }
 
   render() {
