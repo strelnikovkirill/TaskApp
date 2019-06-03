@@ -13,7 +13,8 @@ export default class List extends Component {
     console.log(prevState);
     // TODO: someshit happens here with lifecycle hook, need fix
     if (prevState.tasks.length !== this.state.tasks.length) {
-      Api.task.read().then(response => {
+      let login = localStorage.getItem("login");
+      Api.task.readByUser(login).then(response => {
         this.setState({tasks: response});
       }).catch(function (error) {
         console.log(error);
@@ -22,7 +23,8 @@ export default class List extends Component {
   }
 
   componentDidMount() {
-    Api.task.read().then(response => {
+    let login = localStorage.getItem("login");
+    Api.task.readByUser(login).then(response => {
       this.setState({tasks: response});
     }).catch(function (error) {
       console.log(error);

@@ -52,18 +52,19 @@ personRoutes.route('/edit/:id').get(function (req, res) {
 });
 
 personRoutes.route('/update/:id').post(function (req, res) {
-  Person.findById(req.params.id, function (err, person) {
+  Person.findOne({'login': req.params.id}, function (err, person) {
     if (!person)
       res.status(404).send('Data is not found!');
     else {
       person.firstName = req.body.firstName;
       person.secondName = req.body.secondName;
-      person.login = req.body.login;
-      person.password = req.body.password;
+      //person.login = req.body.login;
+      //person.password = req.body.password;
       person.save().then(person => {
         res.json('Update complete!');
       })
         .catch(err => {
+          console.log(err);
           res.status(400).send('Unable to update the database!');
         });
     }

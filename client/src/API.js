@@ -11,6 +11,10 @@ class Api {
 
       read(login) {
         return axios.get(url + "/person/" + login).then(d => d.data);
+      },
+
+      update(login, params) {
+        return axios.post(url + "/person/update/" + login, params).then(d => d.data);
       }
     }
 
@@ -29,6 +33,10 @@ class Api {
 
       read() {
         return axios.get(url + "/task").then(d => d.data);
+      },
+
+      readByUser(login) {
+        return axios.get(url + "/task/read/" + login).then(d => d.data);
       },
 
       readOne(id) {
